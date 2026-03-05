@@ -35,13 +35,11 @@
   .header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
     gap: 12px;
-    padding: 16px;
+    padding: 14px 18px;
     background: var(--bg-panel);
-    border-radius: 12px;
-    margin-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
   }
   
   .logo {
@@ -72,9 +70,13 @@
     border-radius: 6px;
     font-size: 16px;
     cursor: pointer;
-    transition: transform 0.2s;
+    transition: all 0.2s;
+    position: relative;
   }
-  .theme-toggle:hover { transform: scale(1.1); }
+  .theme-toggle:hover { 
+    transform: scale(1.1);
+    border-color: var(--accent);
+  }
   
   /* Search box */
   .search-box {
@@ -129,57 +131,243 @@
     transform: translateY(0);
   }
   
-  /* Light theme */
+  /* Theme System */
   :root {
+    /* Dark (default) */
     --bg: #0d1117;
     --bg-panel: #161b22;
+    --bg-hover: #21262d;
     --text: #e6edf3;
     --text-dim: #8b949e;
     --border: #30363d;
     --accent: #3fb950;
+    --accent-hover: #2ea043;
     --warning: #d29922;
     --danger: #f85149;
+    --shadow: rgba(0,0,0,0.5);
+    --glow: rgba(63, 185, 80, 0.3);
   }
   
-  .light-theme {
+  /* Light Theme */
+  .theme-light {
     --bg: #f6f8fa;
     --bg-panel: #ffffff;
+    --bg-hover: #f3f4f6;
     --text: #24292f;
     --text-dim: #57606a;
     --border: #d0d7de;
     --accent: #1a7f37;
+    --accent-hover: #116329;
     --warning: #9a6700;
     --danger: #cf222e;
+    --shadow: rgba(0,0,0,0.15);
+    --glow: rgba(26, 127, 55, 0.2);
   }
   
-  .light-theme .game-preview {
-    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  /* Purple Theme */
+  .theme-purple {
+    --bg: #1a1625;
+    --bg-panel: #2d2640;
+    --bg-hover: #3d3555;
+    --text: #e8e4f0;
+    --text-dim: #a8a0b8;
+    --border: #4a4063;
+    --accent: #a855f7;
+    --accent-hover: #9333ea;
+    --warning: #fbbf24;
+    --danger: #f472b6;
+    --shadow: rgba(0,0,0,0.5);
+    --glow: rgba(168, 85, 247, 0.3);
   }
   
-  .light-theme .cheat-panel {
-    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  /* Ocean Theme */
+  .theme-ocean {
+    --bg: #0a192f;
+    --bg-panel: #112240;
+    --bg-hover: #1d3557;
+    --text: #ccd6f6;
+    --text-dim: #8892b0;
+    --border: #233554;
+    --accent: #64ffda;
+    --accent-hover: #4fd1c5;
+    --warning: #ffd93d;
+    --danger: #ff6b6b;
+    --shadow: rgba(0,0,0,0.5);
+    --glow: rgba(100, 255, 218, 0.2);
   }
   
-  .light-theme .cheat-code {
-    background: #f0f0f0;
+  /* Ambient Theme */
+  .theme-ambient {
+    --bg: #1a1a2e;
+    --bg-panel: #16213e;
+    --bg-hover: #1f3460;
+    --text: #eaeaea;
+    --text-dim: #a0a0a0;
+    --border: #2a3a5c;
+    --accent: #e94560;
+    --accent-hover: #ff6b6b;
+    --warning: #ffc107;
+    --danger: #ff4757;
+    --shadow: rgba(0,0,0,0.5);
+    --glow: rgba(233, 69, 96, 0.3);
   }
   
-  .light-theme .toast {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  /* Matrix Theme */
+  .theme-matrix {
+    --bg: #000000;
+    --bg-panel: #0a0a0a;
+    --bg-hover: #0f0f0f;
+    --text: #00ff41;
+    --text-dim: #008f11;
+    --border: #003b00;
+    --accent: #00ff41;
+    --accent-hover: #00cc33;
+    --warning: #ffff00;
+    --danger: #ff0000;
+    --shadow: rgba(0, 255, 65, 0.1);
+    --glow: rgba(0, 255, 65, 0.4);
   }
   
-  .light-theme .game-item .favorite-btn {
-    background: rgba(255,255,255,0.8);
+  .theme-matrix .game-icon,
+  .theme-matrix .logo-icon,
+  .theme-matrix .status {
+    text-shadow: 0 0 10px var(--accent);
   }
   
-  .light-theme .loading-overlay {
-    background: rgba(255,255,255,0.9);
+  .theme-matrix .btn-primary {
+    box-shadow: 0 0 15px var(--glow);
   }
   
-  .light-theme .spinner {
+  /* Theme-specific adaptations */
+  .theme-light .game-preview,
+  .theme-light .cheat-panel,
+  .theme-light .toast {
+    box-shadow: 0 8px 32px var(--shadow);
+  }
+  
+  .theme-light .game-item .favorite-btn {
+    background: rgba(0,0,0,0.1);
+  }
+  
+  .theme-light .loading-overlay {
+    background: rgba(255,255,255,0.95);
+  }
+  
+  .theme-light .spinner {
     border-color: var(--border);
     border-top-color: var(--accent);
   }
+  
+  .theme-light .upload-area {
+    background: rgba(0,0,0,0.02);
+  }
+  
+  .theme-light .nav-hint,
+  .theme-light .keyboard-map {
+    background: rgba(0,0,0,0.05);
+  }
+  
+  .theme-light .key-item {
+    background: rgba(0,0,0,0.03);
+  }
+  
+  .theme-light .cheat-code {
+    background: #f0f0f0;
+    color: var(--accent);
+  }
+  
+  /* Dark theme adaptations */
+  .theme-dark .game-preview,
+  .theme-dark .cheat-panel,
+  .theme-dark .toast {
+    box-shadow: 0 8px 32px var(--shadow);
+  }
+  
+  /* Purple theme adaptations */
+  .theme-purple .btn-primary {
+    box-shadow: 0 0 20px var(--glow);
+  }
+  
+  .theme-purple .game-item.selected {
+    border-color: var(--accent);
+    box-shadow: 0 0 15px var(--glow);
+  }
+  
+  /* Ocean theme adaptations */
+  .theme-ocean .btn-primary {
+    box-shadow: 0 0 15px var(--glow);
+  }
+  
+  .theme-ocean .status.playing {
+    text-shadow: 0 0 10px var(--accent);
+  }
+  
+  /* Ambient theme adaptations */
+  .theme-ambient .btn-primary {
+    box-shadow: 0 0 20px var(--glow);
+  }
+  
+  .theme-ambient .game-item:hover {
+    border-color: var(--accent);
+  }
+  
+  /* Theme selector dropdown */
+  .theme-selector {
+    position: relative;
+  }
+  
+  .theme-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 0;
+    min-width: 160px;
+    z-index: 100;
+    display: none;
+    box-shadow: 0 8px 24px var(--shadow);
+  }
+  
+  .theme-dropdown.show {
+    display: block;
+    animation: fadeIn 0.2s ease;
+  }
+  
+  .theme-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: background 0.15s;
+    color: var(--text);
+    font-size: 13px;
+  }
+  
+  .theme-option:hover {
+    background: var(--bg-hover);
+  }
+  
+  .theme-option.active {
+    background: var(--bg-hover);
+    color: var(--accent);
+  }
+  
+  .theme-preview {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+  
+  .theme-preview.dark { background: linear-gradient(135deg, #0d1117, #3fb950); }
+  .theme-preview.light { background: linear-gradient(135deg, #f6f8fa, #1a7f37); }
+  .theme-preview.purple { background: linear-gradient(135deg, #1a1625, #a855f7); }
+  .theme-preview.ocean { background: linear-gradient(135deg, #0a192f, #64ffda); }
+  .theme-preview.ambient { background: linear-gradient(135deg, #1a1a2e, #e94560); }
+  .theme-preview.matrix { background: linear-gradient(135deg, #000000, #00ff41); }
   
   .lang-select:hover { background: rgba(255,255,255,0.1); }
   
@@ -198,18 +386,54 @@
   }
   
   .btn {
-    padding: 8px 16px;
-    border-radius: 6px;
+    padding: 10px 18px;
+    border-radius: 8px;
     border: 1px solid var(--border);
-    background: rgba(255,255,255,0.05);
+    background: var(--bg-panel);
     color: var(--text);
-    font-family: inherit;
-    font-size: 13px;
     cursor: pointer;
+    font-size: 13px;
     transition: all 0.2s;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
+    font-weight: 500;
+  }
+  
+  .btn:hover {
+    background: var(--bg-hover);
+    border-color: var(--accent);
+  }
+  
+  .btn-primary {
+    background: var(--accent);
+    border-color: var(--accent-hover);
+    color: #fff;
+  }
+  
+  .btn-primary:hover {
+    background: var(--accent-hover);
+  }
+  
+  .btn-danger {
+    background: var(--danger);
+    border-color: var(--danger);
+  }
+  
+  .btn-danger:hover {
+    opacity: 0.9;
+  }
+  
+  .btn:hover {
+    background: var(--bg-hover);
+    border-color: var(--accent);
+  }
+  
+  .btn-primary {
+    background: var(--accent);
+    border-color: var(--accent-hover);
+    color: #fff;
+  }
+  
+  .btn-primary:hover {
+    background: var(--accent-hover);
   }
   
   .btn:hover { background: rgba(255,255,255,0.1); }
@@ -218,9 +442,11 @@
   
   .btn-primary {
     background: var(--accent);
-    border-color: var(--accent-hover);
-    color: #000;
-    font-weight: 600;
+    border-color: var(--accent);
+    color: #fff;
+  }
+  .btn-primary:hover {
+    background: var(--accent-hover);
   }
   
   .btn-primary:hover { background: var(--accent-hover); }
@@ -259,16 +485,14 @@
   .screen-overlay {
     position: absolute;
     inset: 0;
-    display: flex;
+    background: var(--bg);
+    display: none;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: rgba(0,0,0,0.85);
-    color: #fff;
-    font-size: 16px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s;
+    z-index: 5;
+    border-radius: 8px;
+    opacity: 0.95;
   }
   
   .screen-overlay.show { opacity: 1; }
@@ -280,21 +504,22 @@
   .loading-overlay {
     position: absolute;
     inset: 0;
+    background: var(--bg);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: rgba(0,0,0,0.95);
-    color: #fff;
-    z-index: 20;
+    z-index: 10;
+    border-radius: 8px;
+    opacity: 0.95;
   }
   
   .loading-overlay.hidden { display: none; }
   
   .spinner {
-    width: 48px;
-    height: 48px;
-    border: 4px solid var(--border);
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border);
     border-top-color: var(--accent);
     border-radius: 50%;
     animation: spin 1s linear infinite;
@@ -303,19 +528,19 @@
   @keyframes spin { to { transform: rotate(360deg); } }
   
   .loading-text { margin-top: 16px; font-size: 14px; }
-  .loading-progress { width: 200px; height: 6px; background: #333; border-radius: 3px; margin-top: 12px; overflow: hidden; }
+  .loading-progress { width: 200px; height: 6px; background: var(--border); border-radius: 3px; margin-top: 12px; overflow: hidden; }
   .loading-progress-bar { height: 100%; background: var(--accent); width: 0%; transition: width 0.2s; }
   .loading-percent { margin-top: 8px; font-size: 12px; color: var(--text); }
   
   /* Status bar */
   .status-bar {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 8px 16px;
-    background: #0a0a0a;
+    gap: 12px;
+    padding: 10px 14px;
+    background: var(--bg-panel);
+    border-bottom: 1px solid var(--border);
     font-size: 12px;
-    color: var(--text-dim);
   }
   
   .rom-title { color: var(--text); font-weight: 500; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -351,10 +576,10 @@
   }
   
   .ctrl-btn {
-    background: #1a1a2e;
-    border: 2px solid #2d2d44;
+    background: var(--bg-hover);
+    border: 2px solid var(--border);
     border-radius: 10px;
-    color: #fff;
+    color: var(--text);
     font-size: 22px;
     cursor: pointer;
     display: flex;
@@ -366,8 +591,8 @@
   }
   
   .ctrl-btn:active, .ctrl-btn.pressed {
-    background: #2d2d44;
-    border-color: #4a4a6a;
+    background: var(--accent);
+    border-color: var(--accent);
     transform: scale(0.95);
   }
   
@@ -550,8 +775,12 @@
   }
   
   .game-item.selected {
-    background: rgba(63, 185, 80, 0.15);
     border-color: var(--accent);
+    background: var(--bg-hover);
+  }
+  .game-item:hover {
+    border-color: var(--accent);
+    background: var(--bg-hover);
   }
   
   .game-item.selected .game-name {
@@ -615,7 +844,7 @@
     justify-content: center;
     gap: 20px;
     padding: 12px;
-    background: rgba(0,0,0,0.3);
+    background: var(--bg-hover);
     border-radius: 8px;
     margin-top: 12px;
     font-size: 12px;
@@ -629,11 +858,12 @@
   }
   
   .nav-hint kbd {
-    background: rgba(255,255,255,0.1);
+    background: var(--bg);
     padding: 4px 8px;
     border-radius: 4px;
     font-family: inherit;
     font-size: 11px;
+    border: 1px solid var(--border);
   }
   
   /* Upload area */
@@ -649,7 +879,7 @@
   
   .upload-area:hover, .upload-area.dragover {
     border-color: var(--accent);
-    background: rgba(63, 185, 80, 0.05);
+    background: var(--bg-hover);
   }
   
   .upload-icon { font-size: 32px; margin-bottom: 8px; }
@@ -671,7 +901,7 @@
   
   /* Keyboard map */
   .keyboard-map {
-    background: rgba(0,0,0,0.3);
+    background: var(--bg-hover);
     border-radius: 8px;
     padding: 14px;
     margin-top: 16px;
@@ -694,13 +924,13 @@
     display: flex;
     justify-content: space-between;
     padding: 5px 8px;
-    background: rgba(255,255,255,0.05);
+    background: var(--bg-hover);
     border-radius: 4px;
     font-size: 11px;
   }
   
   .key-action { color: var(--accent); font-weight: 600; }
-  .key-btn { color: var(--text-dim); background: rgba(255,255,255,0.1); padding: 1px 5px; border-radius: 3px; font-family: monospace; }
+  .key-btn { color: var(--text-dim); background: var(--bg); padding: 1px 5px; border-radius: 3px; font-family: monospace; }
   
   /* Fullscreen */
   .fullscreen-btn {
@@ -708,13 +938,18 @@
     top: 12px;
     right: 12px;
     padding: 8px 12px;
-    background: rgba(0,0,0,0.7);
-    border: 1px solid #333;
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
     border-radius: 6px;
-    color: #fff;
+    color: var(--text);
     cursor: pointer;
     font-size: 12px;
     z-index: 10;
+    transition: all 0.2s;
+  }
+  .fullscreen-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
   }
   
   /* Toast */
@@ -750,7 +985,7 @@
   .cheat-info { flex: 1; }
   .cheat-name { font-weight: 600; color: var(--text); font-size: 14px; }
   .cheat-desc { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
-  .cheat-code { font-family: monospace; background: #222; padding: 4px 8px; border-radius: 4px; font-size: 12px; color: var(--accent); }
+  .cheat-code { font-family: monospace; background: var(--bg); padding: 4px 8px; border-radius: 4px; font-size: 12px; color: var(--accent); }
   
 /* Game Preview */
   .game-preview {
@@ -930,7 +1165,33 @@
       <option value="ru">Русский</option>
       <option value="zh">中文</option>
     </select>
-    <button class="theme-toggle" id="btnTheme" title="Toggle theme">🌙</button>
+    <button class="theme-toggle" id="btnTheme" title="Toggle theme">🎨</button>
+    <div class="theme-dropdown" id="themeDropdown">
+      <div class="theme-option" data-theme="dark">
+        <div class="theme-preview dark"></div>
+        <span>🌙 Dark</span>
+      </div>
+      <div class="theme-option" data-theme="light">
+        <div class="theme-preview light"></div>
+        <span>☀️ Light</span>
+      </div>
+      <div class="theme-option" data-theme="purple">
+        <div class="theme-preview purple"></div>
+        <span>💜 Purple</span>
+      </div>
+      <div class="theme-option" data-theme="ocean">
+        <div class="theme-preview ocean"></div>
+        <span>🌊 Ocean</span>
+      </div>
+      <div class="theme-option" data-theme="ambient">
+        <div class="theme-preview ambient"></div>
+        <span>🌅 Ambient</span>
+      </div>
+      <div class="theme-option" data-theme="matrix">
+        <div class="theme-preview matrix"></div>
+        <span>💻 Matrix</span>
+      </div>
+    </div>
     <div class="status" id="status">Ready to play</div>
     <div class="header-btns">
       <button class="btn btn-primary" id="btnPause" style="display:none;">⏸ Pause</button>
@@ -1402,29 +1663,49 @@ let isFullscreen = false;
 let favorites = JSON.parse(localStorage.getItem('nes_favorites') || '[]');
 let recentGames = JSON.parse(localStorage.getItem('nes_recent') || '[]');
 
-// Theme
-let isDarkTheme = localStorage.getItem('nes_theme') !== 'light';
+// Theme System
+const THEMES = ['dark', 'light', 'purple', 'ocean', 'ambient', 'matrix'];
+let currentTheme = localStorage.getItem('nes_theme') || 'dark';
 
-function toggleTheme() {
-  isDarkTheme = !isDarkTheme;
-  if (isDarkTheme) {
-    document.body.classList.remove('light-theme');
-  } else {
-    document.body.classList.add('light-theme');
-  }
-  localStorage.setItem('nes_theme', isDarkTheme ? 'dark' : 'light');
-  document.getElementById('btnTheme').textContent = isDarkTheme ? '🌙' : '☀️';
+function setTheme(theme) {
+  // Remove all theme classes
+  THEMES.forEach(t => document.body.classList.remove('theme-' + t));
+  
+  // Add new theme
+  document.body.classList.add('theme-' + theme);
+  currentTheme = theme;
+  localStorage.setItem('nes_theme', theme);
+  
+  // Update dropdown
+  document.querySelectorAll('.theme-option').forEach(opt => {
+    opt.classList.toggle('active', opt.dataset.theme === theme);
+  });
+  
   playSound('click');
 }
 
+function toggleThemeDropdown() {
+  const dropdown = document.getElementById('themeDropdown');
+  dropdown.classList.toggle('show');
+}
+
 function initTheme() {
-  if (!isDarkTheme) {
-    document.body.classList.add('light-theme');
-    document.getElementById('btnTheme').textContent = '☀️';
-  } else {
-    document.body.classList.remove('light-theme');
-    document.getElementById('btnTheme').textContent = '🌙';
-  }
+  setTheme(currentTheme);
+  
+  // Close dropdown when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.theme-toggle') && !e.target.closest('.theme-dropdown')) {
+      document.getElementById('themeDropdown').classList.remove('show');
+    }
+  });
+  
+  // Theme option clicks
+  document.querySelectorAll('.theme-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      setTheme(opt.dataset.theme);
+      document.getElementById('themeDropdown').classList.remove('show');
+    });
+  });
 }
 
 // Sound Effects
@@ -2701,7 +2982,7 @@ renderGamesList();
 applyLanguage();
 
 // Theme toggle
-document.getElementById('btnTheme').addEventListener('click', toggleTheme);
+document.getElementById('btnTheme').addEventListener('click', toggleThemeDropdown);
 
 // Search
 document.getElementById('gameSearch').addEventListener('input', (e) => {
