@@ -1,0 +1,144 @@
+<!-- 
+  Icon Generator for NES Emulator Pro
+  
+  Instructions:
+  1. Open this file in a browser
+  2. Right-click on each canvas and "Save Image As"
+  3. Save with the corresponding filename
+  
+  Or use an online tool like:
+  - https://realfavicongenerator.net/
+  - https://www.pwabuilder.com/imageGenerator
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NES Icon Generator</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #1a1a1a; color: #fff; }
+    h1 { color: #3fb950; }
+    .icon-row { display: flex; gap: 20px; flex-wrap: wrap; margin: 20px 0; }
+    .icon-item { text-align: center; }
+    canvas { border: 1px solid #333; border-radius: 8px; }
+    .filename { margin-top: 8px; font-size: 12px; color: #8b949e; }
+    button { margin: 10px; padding: 10px 20px; background: #3fb950; border: none; border-radius: 6px; color: #000; cursor: pointer; font-weight: bold; }
+    button:hover { background: #2ea043; }
+  </style>
+</head>
+<body>
+  <h1>🎮 NES Emulator Pro - Icon Generator</h1>
+  <p>Click "Download All" to save all icons, or right-click each canvas to save individually.</p>
+  
+  <button onclick="downloadAll()">📦 Download All Icons</button>
+  
+  <div class="icon-row" id="icons"></div>
+  
+  <script>
+    const sizes = [16, 32, 72, 96, 128, 144, 152, 180, 192, 384, 512];
+    
+    function drawIcon(ctx, size) {
+      const scale = size / 512;
+      
+      // Background
+      const bgGrad = ctx.createLinearGradient(0, 0, size, size);
+      bgGrad.addColorStop(0, '#0d1117');
+      bgGrad.addColorStop(1, '#161b22');
+      
+      ctx.fillStyle = bgGrad;
+      ctx.beginPath();
+      ctx.roundRect(0, 0, size, size, 64 * scale);
+      ctx.fill();
+      
+      // NES Controller
+      ctx.fillStyle = '#2d2d2d';
+      ctx.strokeStyle = '#444';
+      ctx.lineWidth = 4 * scale;
+      ctx.beginPath();
+      ctx.roundRect(80 * scale, 160 * scale, 352 * scale, 192 * scale, 24 * scale);
+      ctx.fill();
+      ctx.stroke();
+      
+      // D-Pad
+      ctx.fillStyle = '#1a1a1a';
+      ctx.beginPath();
+      ctx.roundRect(120 * scale, 220 * scale, 80 * scale, 24 * scale, 4 * scale);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.roundRect(148 * scale, 192 * scale, 24 * scale, 80 * scale, 4 * scale);
+      ctx.fill();
+      
+      // A Button (red)
+      ctx.fillStyle = '#e74c3c';
+      ctx.beginPath();
+      ctx.arc(356 * scale, 240 * scale, 24 * scale, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // B Button (blue)
+      ctx.fillStyle = '#3498db';
+      ctx.beginPath();
+      ctx.arc(316 * scale, 280 * scale, 24 * scale, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Start/Select
+      ctx.fillStyle = '#555';
+      ctx.beginPath();
+      ctx.roundRect(220 * scale, 260 * scale, 48 * scale, 12 * scale, 6 * scale);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.roundRect(220 * scale, 280 * scale, 48 * scale, 12 * scale, 6 * scale);
+      ctx.fill();
+      
+      // NES Text
+      const accentGrad = ctx.createLinearGradient(0, 350 * scale, 0, 420 * scale);
+      accentGrad.addColorStop(0, '#3fb950');
+      accentGrad.addColorStop(1, '#2ea043');
+      
+      ctx.fillStyle = accentGrad;
+      ctx.font = `bold ${64 * scale}px Arial Black, sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.fillText('NES', size / 2, 400 * scale);
+      
+      // PRO Text
+      ctx.fillStyle = '#8b949e';
+      ctx.font = `${32 * scale}px Arial, sans-serif`;
+      ctx.fillText('PRO', size / 2, 450 * scale);
+    }
+    
+    // Generate icons
+    const iconsContainer = document.getElementById('icons');
+    
+    sizes.forEach(size => {
+      const div = document.createElement('div');
+      div.className = 'icon-item';
+      
+      const canvas = document.createElement('canvas');
+      canvas.width = size;
+      canvas.height = size;
+      canvas.id = `icon-${size}`;
+      
+      const ctx = canvas.getContext('2d');
+      drawIcon(ctx, size);
+      
+      const filename = document.createElement('div');
+      filename.className = 'filename';
+      filename.textContent = `icon-${size}.png`;
+      
+      div.appendChild(canvas);
+      div.appendChild(filename);
+      iconsContainer.appendChild(div);
+    });
+    
+    // Download function
+    function downloadAll() {
+      sizes.forEach(size => {
+        const canvas = document.getElementById(`icon-${size}`);
+        const link = document.createElement('a');
+        link.download = `icon-${size}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0d1117"/>
+      <stop offset="100%" style="stop-color:#161b22"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3fb950"/>
+      <stop offset="100%" style="stop-color:#2ea043"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="512" height="512" rx="64" fill="url(#bg)"/>
+  
+  <!-- NES Controller shape -->
+  <rect x="80" y="160" width="352" height="192" rx="24" fill="#2d2d2d" stroke="#444" stroke-width="4"/>
+  
+  <!-- D-Pad -->
+  <rect x="120" y="220" width="80" height="24" rx="4" fill="#1a1a1a"/>
+  <rect x="148" y="192" width="24" height="80" rx="4" fill="#1a1a1a"/>
+  
+  <!-- Buttons -->
+  <circle cx="356" cy="240" r="24" fill="#e74c3c"/>
+  <circle cx="316" cy="280" r="24" fill="#3498db"/>
+  
+  <!-- Start/Select -->
+  <rect x="220" y="280" width="48" height="12" rx="6" fill="#555"/>
+  <rect x="220" y="260" width="48" height="12" rx="6" fill="#555"/>
+  
+  <!-- Text "NES" -->
+  <text x="256" y="400" font-family="Arial Black, sans-serif" font-size="64" font-weight="bold" fill="url(#accent)" text-anchor="middle">NES</text>
+  
+  <!-- Text "PRO" -->
+  <text x="256" y="460" font-family="Arial, sans-serif" font-size="32" fill="#8b949e" text-anchor="middle">PRO</text>
+</svg>

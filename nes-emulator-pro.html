@@ -391,6 +391,26 @@
   .theme-preview.ambient { background: linear-gradient(135deg, #1a1a2e, #e94560); }
   .theme-preview.matrix { background: linear-gradient(135deg, #000000, #00ff41); }
   
+  /* Animations */
+  @keyframes slideUp {
+    from { transform: translateX(-50%) translateY(100px); opacity: 0; }
+    to { transform: translateX(-50%) translateY(0); opacity: 1; }
+  }
+  
+  @keyframes slideDown {
+    from { transform: translateX(-50%) translateY(0); opacity: 1; }
+    to { transform: translateX(-50%) translateY(100px); opacity: 0; }
+  }
+  
+  /* Install banner */
+  #installBanner {
+    animation: slideUp 0.3s ease;
+  }
+  
+  #installBanner.dismissing {
+    animation: slideDown 0.3s ease forwards;
+  }
+  
   .lang-select:hover { background: rgba(255,255,255,0.1); }
   
   .status {
@@ -2151,9 +2171,19 @@ async function loadSelectedGame() {
   isMenuFocused = false;
   
   try {
-    // Проверяем кэш
+    // 1. Check memory cache first
     let arrayBuffer = romCache.get(game.file);
     
+    // 2. Check IndexedDB (offline storage)
+    if (!arrayBuffer && typeof getROMFromIndexedDB === 'function') {
+      arrayBuffer = await getROMFromIndexedDB(game.file);
+      if (arrayBuffer) {
+        console.log('📦 ROM loaded from IndexedDB:', game.name);
+        romCache.set(game.file, arrayBuffer); // Cache in memory too
+      }
+    }
+    
+    // 3. Download from network
     if (!arrayBuffer) {
       const url = GITHUB_REPO + encodeURIComponent(game.file);
       const response = await fetch(url);
@@ -2179,7 +2209,7 @@ async function loadSelectedGame() {
         }
       }
       
-      // Объединяем чанки в ArrayBuffer
+      // Combine chunks into ArrayBuffer
       const totalLength = chunks.reduce((acc, chunk) => acc + chunk.length, 0);
       arrayBuffer = new Uint8Array(totalLength);
       let offset = 0;
@@ -2188,7 +2218,15 @@ async function loadSelectedGame() {
         offset += chunk.length;
       }
       
-      romCache.set(game.file, arrayBuffer); // Кэшируем
+      // Cache in memory
+      romCache.set(game.file, arrayBuffer);
+      
+      // Save to IndexedDB for offline access
+      if (typeof saveROMToIndexedDB === 'function') {
+        saveROMToIndexedDB(game.file, game.name, arrayBuffer.buffer)
+          .then(() => console.log('💾 ROM saved to IndexedDB:', game.name))
+          .catch(e => console.warn('Failed to save ROM to IndexedDB:', e));
+      }
     }
     
     loadingOverlay.classList.add('hidden');
@@ -3117,4 +3155,153 @@ window.NESEmulatorPro = {
 };
 
 })();
-</script>
+
+
+// ============================================================
+// PWA - Service Worker Registration
+// ============================================================
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', async () => {
+    try {
+      const registration = await navigator.serviceWorker.register('service-worker.js');
+      console.log('✅ Service Worker registered:', registration.scope);
+      
+      // Check for updates
+      registration.addEventListener('updatefound', () => {
+        const newWorker = registration.installing;
+        newWorker.addEventListener('statechange', () => {
+          if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+            // New version available
+            showToast('updateAvailable', 'info');
+          }
+        });
+      });
+    } catch (error) {
+      console.error('❌ Service Worker registration failed:', error);
+    }
+  });
+  
+  // Handle PWA install prompt
+  let deferredPrompt;
+  
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    
+    // Show install button or banner
+    showInstallPrompt();
+  });
+  
+  function showInstallPrompt() {
+    // Create install banner
+    const banner = document.createElement('div');
+    banner.id = 'installBanner';
+    banner.style.cssText = `
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg-panel);
+      border: 1px solid var(--accent);
+      border-radius: 12px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 999;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      animation: slideUp 0.3s ease;
+    `;
+    banner.innerHTML = `
+      <span style="font-size: 24px;">📱</span>
+      <div>
+        <div style="font-weight: 600; color: var(--text);">Install NES Emulator Pro</div>
+        <div style="font-size: 12px; color: var(--text-dim);">Play offline, no browser needed</div>
+      </div>
+      <button id="installBtn" style="
+        background: var(--accent);
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+      ">Install</button>
+      <button id="dismissInstall" style="
+        background: transparent;
+        border: 1px solid var(--border);
+        padding: 8px 12px;
+        border-radius: 6px;
+        color: var(--text-dim);
+        cursor: pointer;
+      ">Later</button>
+    `;
+    
+    document.body.appendChild(banner);
+    
+    // Install button
+    document.getElementById('installBtn').addEventListener('click', async () => {
+      banner.remove();
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log('Install outcome:', outcome);
+      deferredPrompt = null;
+    });
+    
+    // Dismiss button
+    document.getElementById('dismissInstall').addEventListener('click', () => {
+      banner.remove();
+      localStorage.setItem('nes_install_dismissed', Date.now());
+    });
+  }
+  
+  // Check if app is installed
+  window.addEventListener('appinstalled', () => {
+    console.log('✅ PWA installed');
+    const banner = document.getElementById('installBanner');
+    if (banner) banner.remove();
+  });
+}
+
+// ============================================================
+// IndexedDB for Offline ROM Storage
+// ============================================================
+const DB_NAME = 'NES-emulator-db';
+const DB_VERSION = 1;
+let db = null;
+
+async function initDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(DB_NAME, DB_VERSION);
+    
+    request.onerror = () => reject(request.error);
+    request.onsuccess = () => {
+      db = request.result;
+      resolve(db);
+    };
+    
+    request.onupgradeneeded = (event) => {
+      const database = event.target.result;
+      
+      // ROMs store
+      if (!database.objectStoreNames.contains('roms')) {
+        const romStore = database.createObjectStore('roms', { keyPath: 'file' });
+        romStore.createIndex('name', 'name', { unique: false });
+        romStore.createIndex('timestamp', 'timestamp', { unique: false });
+      }
+      
+      // Save states store
+      if (!database.objectStoreNames.contains('saveStates')) {
+        const saveStore = database.createObjectStore('saveStates', { keyPath: 'id' });
+        saveStore.createIndex('romName', 'romName', { unique: false });
+      }
+      
+      // Settings store
+      if (!database.objectStoreNames.contains('settings')) {
+        database.createObjectStore('settings', { keyPath: 'key' });
+      }
+    };
+  });
+}
+
+async function saveROMTo
