@@ -1,18 +1,18 @@
 # Игровые ROM-файлы (могут быть защищены авторским правом)
-*.nes
-*.NES
-*.fds
-*.FDS
-*.unf
-*.UNF
-*.nsf
-*.NSF
-*.zip
-*.ZIP
-*.7z
-*.7Z
-*.rar
-*.RAR
+#*.nes
+#*.NES
+#*.fds
+#*.FDS
+#*.unf
+#*.UNF
+#*.nsf
+#*.NSF
+#*.zip
+#*.ZIP
+#*.7z
+#*.7Z
+#*.rar
+#*.RAR
 
 # Архивы
 games/archive/
