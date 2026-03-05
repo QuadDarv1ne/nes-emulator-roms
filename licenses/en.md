@@ -38,3 +38,14 @@ You should only use ROM files if you legally own the original games. Distributin
 ### Translation Notes
 
 This is an unofficial translation of the Creative Commons license into English for reference purposes only. The official legal text is available at the link above.
+
+---
+
+## 👤 Project Author
+
+**Dupley Maxim Igorevich** (Дуплей Максим Игоревич)
+
+### 🔗 Useful Links
+
+- [NESRoms.ru](https://nesroms.ru/) — Download NES games
+- [Emu-Land](https://www.emu-land.net/) — Emulators and games

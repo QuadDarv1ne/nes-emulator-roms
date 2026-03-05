@@ -38,3 +38,14 @@
 ### 翻译说明
 
 这是 Creative Commons 许可证的非官方中文翻译，仅供参考。官方法律文本可通过上述链接访问。
+
+---
+
+## 👤 项目作者
+
+**Dupley Maxim Igorevich** (Дуплей Максим Игореvich)
+
+### 🔗 相关链接
+
+- [NESRoms.ru](https://nesroms.ru/) — 下载 NES 游戏
+- [Emu-Land](https://www.emu-land.net/) — 模拟器和游戏

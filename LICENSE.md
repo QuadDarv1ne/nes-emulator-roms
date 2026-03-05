@@ -24,4 +24,11 @@ This repository contains ROM files which may be protected by copyright. The main
 
 ---
 
+## 👤 Автор / Author / 作者
+
+**Дуплей Максим Игоревич** (Dupley Maxim Igorevich)
+
+---
+
 *For more information, see the [README.md](./README.md).*
+*Автор проекта: Дуплей Максим Игоревич*

@@ -86,7 +86,7 @@ NES（任天堂娱乐系统）ROM 文件合集。
 
 ---
 
-## 🚀 Использование / Usage / 使用
+## 📜 Использование / Usage / 使用
 
 ### Запуск игр / Running games / 运行游戏
 
@@ -103,4 +103,26 @@ NES（任天堂娱乐系统）ROM 文件合集。
 
 ---
 
+## 👤 Автор проекта / Project Author / 项目作者
+
+**Дуплей Максим Игоревич** (Dupley Maxim Igorevich)
+
+---
+
+## 🔗 Полезные ссылки / Useful Links / 相关链接
+
+### Скачать ROM-файлы / Download ROMs / 下载 ROM 文件
+
+- 🌐 [NESRoms.ru](https://nesroms.ru/) — Русский сайт с коллекцией NES игр
+- 🌐 [Emu-Land](https://www.emu-land.net/) — Эмуляторы и ROM-файлы
+
+### Эмуляторы / Emulators / 模拟器
+
+- [FCEUX](https://github.com/TASEmulators/fceux) — Windows/Linux/macOS
+- [Mesen](https://github.com/SourMesen/Mesen) — Windows/macOS
+- [Nestopia](http://nestopia.sourceforge.net/) — Windows/Linux
+
+---
+
 *This README is available in [English](./README.md), [Русский](./README.md), and [中文](./README.md).*
+*Автор проекта: Дуплей Максим Игоревич*
