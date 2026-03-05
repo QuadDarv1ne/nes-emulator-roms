@@ -199,13 +199,15 @@
     color: var(--text-dim);
   }
   
-  .rom-title { color: var(--text); font-weight: 500; }
+  .rom-title { color: var(--text); font-weight: 500; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .fps { color: var(--accent); font-weight: 600; }
+  .status-divider { color: var(--border); margin: 0 8px; }
   .speed-indicator { display: flex; align-items: center; gap: 4px; }
   .speed-indicator.stable { color: var(--accent); }
   .speed-indicator.unstable { color: var(--warning); }
   .gamepad-status { display: flex; align-items: center; gap: 4px; }
   .gamepad-status.connected { color: var(--accent); }
+  .status-bar .gamepad-status span:first-child { font-size: 14px; }
   
   /* Controls */
   .controls-section {
@@ -760,10 +762,12 @@
     
     <div class="status-bar">
       <span class="rom-title" id="romTitle">No ROM</span>
+      <span class="status-divider">|</span>
       <span class="speed-indicator stable" id="speedIndicator">
         <span>⚡</span>
         <span id="fpsDisplay">60</span> FPS
       </span>
+      <span class="status-divider">|</span>
       <span class="gamepad-status" id="gamepadStatus">
         <span>🎮</span>
         <span>No gamepad</span>
@@ -830,14 +834,14 @@
   <!-- Menu Section -->
   <div class="menu-section" id="menuSection">
     <div class="menu-header">
-      <div class="menu-title">🎮 NES Emulator Pro</div>
+      <div class="menu-title">NES Emulator Pro</div>
       <div class="menu-subtitle">Select a game and press Enter to play</div>
     </div>
     
     <!-- Game List -->
     <div class="games-list-container">
       <div class="games-list-header">
-        <div class="games-list-title">🎮 Games</div>
+        <div class="games-list-title">Games</div>
         <div class="games-count" id="gamesCount">0 games</div>
       </div>
       <div class="games-list" id="gamesList" tabindex="0">
@@ -1712,6 +1716,7 @@ function pollGamepad() {
 
 function connectGamepad(e) {
   gamepadIndex = e.gamepad.index;
+  gamepadStatus.innerHTML = '<span>🎮</span><span>' + t('connected') + '</span>';
   gamepadStatus.classList.add('connected');
   showToast('gamepadConnected', 'success');
   pollGamepad();
@@ -2073,11 +2078,14 @@ function applyLanguage() {
   
   // Status bar
   romTitle.textContent = t('noRom');
-  gamepadStatus.innerHTML = `<span>🎮</span><span>${t('noGamepad')}</span>`;
+  // Не перезаписывать если геймпад уже подключен
+  if (gamepadIndex === null) {
+    gamepadStatus.innerHTML = `<span>🎮</span><span>${t('noGamepad')}</span>`;
+  }
   
   // Menu
   document.querySelector('.menu-subtitle').textContent = t('selectGame');
-  document.querySelector('.games-list-title').textContent = '🎮 ' + t('games');
+  document.querySelector('.games-list-title').textContent = t('games');
   
   // Nav hints
   const navHints = document.querySelectorAll('.nav-hint-item');
