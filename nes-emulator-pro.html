@@ -55,14 +55,130 @@
 .logo-icon { font-size: 28px; }
   
   .lang-select {
-    padding: 6px 12px;
-    border-radius: 6px;
+    background: var(--bg-panel);
     border: 1px solid var(--border);
-    background: rgba(255,255,255,0.05);
     color: var(--text);
-    font-family: inherit;
+    padding: 6px 10px;
+    border-radius: 6px;
     font-size: 12px;
     cursor: pointer;
+  }
+  
+  .theme-toggle {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .theme-toggle:hover { transform: scale(1.1); }
+  
+  /* Search box */
+  .search-box {
+    margin-bottom: 12px;
+  }
+  .search-box input {
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 14px;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .search-box input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(63, 185, 80, 0.15);
+  }
+  .search-box input::placeholder { color: var(--text-dim); }
+  
+  /* Animations */
+  .game-section, .menu-section {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  .game-section.active {
+    animation: fadeIn 0.3s ease;
+  }
+  .menu-section {
+    animation: fadeIn 0.3s ease;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .game-item {
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+  }
+  .game-item:hover {
+    transform: translateX(4px);
+  }
+  .btn {
+    transition: all 0.2s;
+  }
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
+  .btn:active {
+    transform: translateY(0);
+  }
+  
+  /* Light theme */
+  :root {
+    --bg: #0d1117;
+    --bg-panel: #161b22;
+    --text: #e6edf3;
+    --text-dim: #8b949e;
+    --border: #30363d;
+    --accent: #3fb950;
+    --warning: #d29922;
+    --danger: #f85149;
+  }
+  
+  .light-theme {
+    --bg: #f6f8fa;
+    --bg-panel: #ffffff;
+    --text: #24292f;
+    --text-dim: #57606a;
+    --border: #d0d7de;
+    --accent: #1a7f37;
+    --warning: #9a6700;
+    --danger: #cf222e;
+  }
+  
+  .light-theme .game-preview {
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  }
+  
+  .light-theme .cheat-panel {
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  }
+  
+  .light-theme .cheat-code {
+    background: #f0f0f0;
+  }
+  
+  .light-theme .toast {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  
+  .light-theme .game-item .favorite-btn {
+    background: rgba(255,255,255,0.8);
+  }
+  
+  .light-theme .loading-overlay {
+    background: rgba(255,255,255,0.9);
+  }
+  
+  .light-theme .spinner {
+    border-color: var(--border);
+    border-top-color: var(--accent);
   }
   
   .lang-select:hover { background: rgba(255,255,255,0.1); }
@@ -187,6 +303,9 @@
   @keyframes spin { to { transform: rotate(360deg); } }
   
   .loading-text { margin-top: 16px; font-size: 14px; }
+  .loading-progress { width: 200px; height: 6px; background: #333; border-radius: 3px; margin-top: 12px; overflow: hidden; }
+  .loading-progress-bar { height: 100%; background: var(--accent); width: 0%; transition: width 0.2s; }
+  .loading-percent { margin-top: 8px; font-size: 12px; color: var(--text); }
   
   /* Status bar */
   .status-bar {
@@ -417,12 +536,13 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 10px 14px;
+    padding: 10px 40px 10px 14px;
     background: rgba(255,255,255,0.03);
     border: 2px solid transparent;
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.15s;
+    position: relative;
   }
   
   .game-item:hover {
@@ -443,11 +563,40 @@
     pointer-events: none;
   }
   
+  .game-item .favorite-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.5);
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+    z-index: 10;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+  .game-item .favorite-btn:hover, .game-item .favorite-btn.active { opacity: 1; }
+  .games-list-container.favorites { border-left: 3px solid #f5c518; }
+  .games-list-container.recent { border-left: 3px solid #4a90d9; }
+  
   .game-icon {
     font-size: 20px;
-    width: 28px;
+    width: 32px;
+    height: 32px;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
     flex-shrink: 0;
+    transition: transform 0.2s;
+  }
+  
+  .game-item:hover .game-icon {
+    transform: scale(1.15);
   }
   
   .game-name {
@@ -592,6 +741,50 @@
   .toast.success { border-color: var(--accent); }
   .toast.error { border-color: var(--danger); }
   
+  /* Cheat panel */
+  .cheat-panel { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; z-index: 1000; min-width: 320px; max-width: 90vw; max-height: 80vh; overflow-y: auto; display: none; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+  .cheat-panel.show { display: block; }
+  .cheat-panel h3 { margin: 0 0 16px; color: var(--text); font-size: 16px; }
+  .cheat-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .cheat-item:last-child { border-bottom: none; }
+  .cheat-info { flex: 1; }
+  .cheat-name { font-weight: 600; color: var(--text); font-size: 14px; }
+  .cheat-desc { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+  .cheat-code { font-family: monospace; background: #222; padding: 4px 8px; border-radius: 4px; font-size: 12px; color: var(--accent); }
+  
+/* Game Preview */
+  .game-preview {
+    position: fixed;
+    background: var(--bg-panel);
+    border: 2px solid var(--accent);
+    border-radius: 12px;
+    padding: 16px;
+    z-index: 500;
+    display: none;
+    text-align: center;
+    min-width: 200px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    animation: popIn 0.2s ease;
+    pointer-events: none;
+  }
+  .game-preview.show { display: block; }
+  @keyframes popIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .preview-image {
+    width: 128px;
+    height: 120px;
+    border-radius: 8px;
+    margin: 0 auto 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 64px;
+  }
+  .preview-name { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+  .preview-hint { font-size: 12px; color: var(--text-dim); }
+  
   /* Scrollbar */
   .games-list::-webkit-scrollbar {
     width: 6px;
@@ -614,8 +807,9 @@
   /* Responsive */
   @media (max-width: 768px) {
     .container { padding: 8px; }
-    .header { padding: 12px; }
+    .header { padding: 12px; flex-wrap: wrap; gap: 8px; }
     .header-btns { width: 100%; justify-content: center; }
+    .theme-toggle { order: -1; }
     .dpad { grid-template-columns: repeat(3, 48px); grid-template-rows: repeat(3, 48px); }
     .abtns { grid-template-columns: repeat(3, 56px); grid-template-rows: repeat(2, 56px); }
     .action-btn { width: 56px; height: 56px; font-size: 16px; }
@@ -736,10 +930,12 @@
       <option value="ru">Русский</option>
       <option value="zh">中文</option>
     </select>
+    <button class="theme-toggle" id="btnTheme" title="Toggle theme">🌙</button>
     <div class="status" id="status">Ready to play</div>
     <div class="header-btns">
       <button class="btn btn-primary" id="btnPause" style="display:none;">⏸ Pause</button>
       <button class="btn" id="btnReset" style="display:none;">🔄 Reset</button>
+      <button class="btn" id="btnCheats" style="display:none;">🎯 Cheats</button>
       <button class="btn btn-danger" id="btnStop" style="display:none;">✕ Stop</button>
     </div>
   </div>
@@ -752,6 +948,10 @@
       <div class="loading-overlay hidden" id="loadingOverlay">
         <div class="spinner"></div>
         <div class="loading-text" id="loadingText">Loading...</div>
+        <div class="loading-progress">
+          <div class="loading-progress-bar" id="loadingProgressBar"></div>
+        </div>
+        <div class="loading-percent" id="loadingPercent">0%</div>
       </div>
       <div class="screen-overlay" id="overlay">
         <div class="icon">⏸</div>
@@ -838,11 +1038,34 @@
       <div class="menu-subtitle">Select a game and press Enter to play</div>
     </div>
     
+    <!-- Recent Games -->
+    <div class="games-list-container" id="recentSection" style="display:none;">
+      <div class="games-list-header">
+        <div class="games-list-title">🕐 Recent</div>
+      </div>
+      <div class="games-list" id="recentList">
+        <!-- Recent games loaded dynamically -->
+      </div>
+    </div>
+    
+    <!-- Favorites -->
+    <div class="games-list-container" id="favoritesSection" style="display:none;">
+      <div class="games-list-header">
+        <div class="games-list-title">⭐ Favorites</div>
+      </div>
+      <div class="games-list" id="favoritesList">
+        <!-- Favorites loaded dynamically -->
+      </div>
+    </div>
+    
     <!-- Game List -->
     <div class="games-list-container">
       <div class="games-list-header">
-        <div class="games-list-title">Games</div>
+        <div class="games-list-title">🎮 All Games</div>
         <div class="games-count" id="gamesCount">0 games</div>
+      </div>
+      <div class="search-box">
+        <input type="text" id="gameSearch" placeholder="Search games...">
       </div>
       <div class="games-list" id="gamesList" tabindex="0">
         <!-- Games loaded dynamically -->
@@ -856,6 +1079,7 @@
       <div class="nav-hint-item"><kbd>Enter</kbd> Play</div>
       <div class="nav-hint-item"><kbd>Esc</kbd> Back to menu</div>
       <div class="nav-hint-item"><kbd>F</kbd> Fullscreen</div>
+      <div class="nav-hint-item"><kbd>C</kbd> Cheats</div>
     </div>
     
     <input type="file" id="romInput" accept=".nes,.zip" style="display:none;">
@@ -889,6 +1113,20 @@
 <!-- Toast -->
 <div class="toast" id="toast"></div>
 
+<!-- Game Preview Popup -->
+<div class="game-preview" id="gamePreview">
+  <div class="preview-image" id="previewImage"></div>
+  <div class="preview-name" id="previewName"></div>
+  <div class="preview-hint">Press Enter to play</div>
+</div>
+
+<!-- Cheat Panel -->
+<div class="cheat-panel" id="cheatPanel">
+  <h3>🎮 Cheat Codes</h3>
+  <div id="cheatList"></div>
+  <button class="btn" onclick="document.getElementById('cheatPanel').classList.remove('show')" style="margin-top:12px;width:100%;">Close</button>
+</div>
+
 <!-- jsnes Library -->
 <script src="https://cdn.jsdelivr.net/npm/jsnes@1.2.1/dist/jsnes.min.js"></script>
 
@@ -903,6 +1141,7 @@ const i18n = {
   en: {
     readyToPlay: 'Ready to play',
     loading: 'Loading...',
+    loadingProgress: 'Loading: {0}%',
     pause: 'Pause',
     resume: 'Resume',
     reset: 'Reset',
@@ -914,6 +1153,7 @@ const i18n = {
     connected: 'Connected',
     selectGame: 'Select a game and press Enter to play',
     games: 'Games',
+    searchPlaceholder: 'Search games...',
     navigate: 'Navigate',
     switchColumn: 'Switch column',
     play: 'Play',
@@ -951,6 +1191,7 @@ const i18n = {
   ru: {
     readyToPlay: 'Готов к игре',
     loading: 'Загрузка...',
+    loadingProgress: 'Загрузка: {0}%',
     pause: 'Пауза',
     resume: 'Продолжить',
     reset: 'Сброс',
@@ -962,6 +1203,7 @@ const i18n = {
     connected: 'Подключён',
     selectGame: 'Выберите игру и нажмите Enter',
     games: 'Игры',
+    searchPlaceholder: 'Поиск игр...',
     navigate: 'Навигация',
     switchColumn: 'Столбец',
     play: 'Играть',
@@ -999,6 +1241,7 @@ const i18n = {
   zh: {
     readyToPlay: '准备就绪',
     loading: '加载中...',
+    loadingProgress: '加载中: {0}%',
     pause: '暂停',
     resume: '继续',
     reset: '重置',
@@ -1010,6 +1253,7 @@ const i18n = {
     connected: '已连接',
     selectGame: '选择游戏并按Enter开始',
     games: '游戏',
+    searchPlaceholder: '搜索游戏...',
     navigate: '导航',
     switchColumn: '切换列',
     play: '开始',
@@ -1072,35 +1316,63 @@ const KEY_MAP_UP = {
 const romCache = new Map();
 
 // ============================================================
+// CHEAT CODES for popular games
+// ============================================================
+const CHEAT_CODES = {
+  'Super Mario Bros. (World).nes': [
+    { name: '30 Lives', code: '000000 03', description: 'Start with 30 lives' },
+    { name: 'Infinite Lives', code: '0104C1FF', description: 'Never lose lives' },
+    { name: 'Invincibility', code: '090303FF', description: 'Star power effect' }
+  ],
+  'Super Mario Bros. 3 (USA).nes': [
+    { name: '30 Lives', code: '010947FF', description: 'Start with 30 lives' },
+    { name: 'Level Select', code: '0108B0FF', description: 'Enable level select' }
+  ],
+  'Contra (USA).nes': [
+    { name: '30 Lives', code: '0108C3FF', description: 'Start with 30 lives' },
+    { name: 'Konami Code', code: '0108C3FF', description: 'Classic cheat' }
+  ],
+  'Tetris (U) [T-Rus Cool-Spot].nes': [
+    { name: 'Lines Mode', code: '0108A0FF', description: 'Lines mode' }
+  ],
+  'Duck Hunt (World).nes': [
+    { name: '30 Bullets', code: '0108A0FF', description: '30 bullets per round' }
+  ],
+  'Battle City (J).nes': [
+    { name: 'Tank Upgrades', code: '79026303', description: 'All powerups' }
+  ]
+};
+
+// ============================================================
 // Preloaded Games from GitHub
 // ============================================================
 const PRELOADED_GAMES = [
-  { name: 'Super Mario Bros.', file: 'Super Mario Bros. (World).nes', icon: '🍄' },
-  { name: 'Super Mario Bros. 3', file: 'Super Mario Bros. 3 (USA).nes', icon: '🌟' },
-  { name: 'Contra', file: 'Contra (USA).nes', icon: '🔫' },
-  { name: 'Tetris (Rus)', file: 'Tetris (U) [T-Rus Cool-Spot].nes', icon: '🧱' },
-  { name: 'Duck Hunt', file: 'Duck Hunt (World).nes', icon: '🦆' },
-  { name: 'Donkey Kong', file: 'Donkey Kong (World) (Rev A).nes', icon: '🦍' },
-  { name: 'Battletoads & Double Dragon', file: 'Battletoads-Double Dragon (USA).nes', icon: '🐸' },
-  { name: 'Adventure Island II', file: 'Adventure Island II (U).nes', icon: '🏝️' },
-  { name: 'Adventure Island IV', file: 'Adventure Island IV (U).nes', icon: '🌴' },
-  { name: 'Aladdin', file: 'Aladdin (Russia) (Pirate).nes', icon: '🧞' },
-  { name: 'Battle City', file: 'Battle City (J).nes', icon: '🎖️' },
-  { name: 'Chip \'n Dale', file: 'Chip \'n Dale - Rescue Rangers (U).nes', icon: '🐿️' },
-  { name: 'Chip \'n Dale 2', file: 'Chip \'n Dale - Rescue Rangers 2 (U).nes', icon: '🌰' },
-  { name: 'Darkwing Duck', file: 'Darkwing Duck (U).nes', icon: '🦸' },
-  { name: 'Duck Tales', file: 'Duck Tales (U).nes', icon: '💰' },
-  { name: 'DuckTales 2', file: 'DuckTales 2 (U).nes', icon: '💎' },
-  { name: 'Felix the Cat', file: 'Felix the Cat (U).nes', icon: '🐱' },
-  { name: 'Flintstones', file: 'Flintstones - Surprise at Dinosaur Peak! (U).nes', icon: '🦕' },
-  { name: 'Jackal', file: 'Jackal (U).nes', icon: '🚙' },
-  { name: 'Little Mermaid', file: 'Little Mermaid, The (U).nes', icon: '🧜' },
-  { name: 'Pac-Man', file: 'Pac-Man (U) (Namco).nes', icon: '👻' },
-  { name: 'Prince of Persia', file: 'Prince of Persia (U).nes', icon: '🤴' },
-  { name: 'TMNT III', file: 'TMNT III - Manhattan Project (U).nes', icon: '🐢' },
-  { name: 'Tiny Toon Adventures', file: 'Tiny Toon Adventures (U).nes', icon: '🐰' },
-  { name: 'Tiny Toon Adventures 2', file: 'Tiny Toon Adventures 2 - Trouble in Wackyland (U).nes', icon: '🎭' },
-  { name: 'Tom & Jerry', file: 'Tom & Jerry - Ultimate Game of Cat and Mouse! (U).nes', icon: '🐭' }
+  { name: 'Super Mario Bros.', file: 'Super Mario Bros. (World).nes', icon: '🍄', color: '#e70012' },
+  { name: 'Super Mario Bros. 3', file: 'Super Mario Bros. 3 (USA).nes', icon: '🌟', color: '#ff6b35' },
+  { name: 'Contra', file: 'Contra (USA).nes', icon: '🔫', color: '#ff3131' },
+  { name: 'Tetris (Rus)', file: 'Tetris (U) [T-Rus Cool-Spot].nes', icon: '🧱', color: '#4a90d9' },
+  { name: 'Duck Hunt', file: 'Duck Hunt (World).nes', icon: '🦆', color: '#6b8e23' },
+  { name: 'Donkey Kong', file: 'Donkey Kong (World) (Rev A).nes', icon: '🦍', color: '#8b4513' },
+  { name: 'Battletoads & Double Dragon', file: 'Battletoads-Double Dragon (USA).nes', icon: '🐸', color: '#32cd32' },
+  { name: 'Adventure Island II', file: 'Adventure Island II (U).nes', icon: '🏝️', color: '#20b2aa' },
+  { name: 'Adventure Island IV', file: 'Adventure Island IV (U).nes', icon: '🌴', color: '#228b22' },
+  { name: 'Aladdin', file: 'Aladdin (Russia) (Pirate).nes', icon: '🧞', color: '#ffd700' },
+  { name: 'Battle City', file: 'Battle City (J).nes', icon: '🎖️', color: '#c0c0c0' },
+  { name: 'Chip \'n Dale', file: 'Chip \'n Dale - Rescue Rangers (U).nes', icon: '🐿️', color: '#8b008b' },
+  { name: 'Chip \'n Dale 2', file: 'Chip \'n Dale - Rescue Rangers 2 (U).nes', icon: '🌰', color: '#9932cc' },
+  { name: 'Darkwing Duck', file: 'Darkwing Duck (U).nes', icon: '🦸', color: '#4b0082' },
+  { name: 'Duck Tales', file: 'Duck Tales (U).nes', icon: '💰', color: '#daa520' },
+  { name: 'DuckTales 2', file: 'DuckTales 2 (U).nes', icon: '💎', color: '#00ced1' },
+  { name: 'Felix the Cat', file: 'Felix the Cat (U).nes', icon: '🐱', color: '#000000' },
+  { name: 'Flintstones', file: 'Flintstones - Surprise at Dinosaur Peak! (U).nes', icon: '🦕', color: '#8b4513' },
+  { name: 'Jackal', file: 'Jackal (U).nes', icon: '🚙', color: '#2e8b57' },
+  { name: 'Little Mermaid', file: 'Little Mermaid, The (U).nes', icon: '🧜', color: '#ff69b4' },
+  { name: 'Pac-Man', file: 'Pac-Man (U) (Namco).nes', icon: '👻', color: '#ffff00' },
+  { name: 'Prince of Persia', file: 'Prince of Persia (U).nes', icon: '🤴', color: '#4169e1' },
+  { name: 'TMNT III', file: 'TMNT III - Manhattan Project (U).nes', icon: '🐢', color: '#228b22' },
+  { name: 'Tiny Toon Adventures', file: 'Tiny Toon Adventures (U).nes', icon: '🐰', color: '#ff6347' },
+  { name: 'Tiny Toon Adventures 2', file: 'Tiny Toon Adventures 2 - Trouble in Wackyland (U).nes', icon: '🎭', color: '#ff4500' },
+  { name: 'Tom & Jerry', file: 'Tom & Jerry - Ultimate Game of Cat and Mouse! (U).nes', icon: '🐭', color: '#d3d3d3' }
 ];
 
 const GITHUB_REPO = 'https://raw.githubusercontent.com/QuadDarv1ne/nes-emulator-roms/main/games/';
@@ -1125,6 +1397,248 @@ let gamepadPollId = null;
 let selectedGameIndex = 0;
 let isMenuFocused = true;
 let isFullscreen = false;
+
+// Favorites & History
+let favorites = JSON.parse(localStorage.getItem('nes_favorites') || '[]');
+let recentGames = JSON.parse(localStorage.getItem('nes_recent') || '[]');
+
+// Theme
+let isDarkTheme = localStorage.getItem('nes_theme') !== 'light';
+
+function toggleTheme() {
+  isDarkTheme = !isDarkTheme;
+  if (isDarkTheme) {
+    document.body.classList.remove('light-theme');
+  } else {
+    document.body.classList.add('light-theme');
+  }
+  localStorage.setItem('nes_theme', isDarkTheme ? 'dark' : 'light');
+  document.getElementById('btnTheme').textContent = isDarkTheme ? '🌙' : '☀️';
+  playSound('click');
+}
+
+function initTheme() {
+  if (!isDarkTheme) {
+    document.body.classList.add('light-theme');
+    document.getElementById('btnTheme').textContent = '☀️';
+  } else {
+    document.body.classList.remove('light-theme');
+    document.getElementById('btnTheme').textContent = '🌙';
+  }
+}
+
+// Sound Effects
+let soundCtx = null;
+
+function playSound(type) {
+  try {
+    if (!soundCtx) soundCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (soundCtx.state === 'suspended') soundCtx.resume();
+    
+    const osc = soundCtx.createOscillator();
+    const gain = soundCtx.createGain();
+    osc.connect(gain);
+    gain.connect(soundCtx.destination);
+    
+    if (type === 'click') {
+      osc.frequency.value = 800;
+      gain.gain.setValueAtTime(0.1, soundCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, soundCtx.currentTime + 0.1);
+      osc.start();
+      osc.stop(soundCtx.currentTime + 0.1);
+    } else if (type === 'success') {
+      osc.frequency.value = 600;
+      osc.frequency.setValueAtTime(800, soundCtx.currentTime + 0.1);
+      gain.gain.setValueAtTime(0.1, soundCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, soundCtx.currentTime + 0.2);
+      osc.start();
+      osc.stop(soundCtx.currentTime + 0.2);
+    } else if (type === 'error') {
+      osc.frequency.value = 300;
+      osc.frequency.setValueAtTime(200, soundCtx.currentTime + 0.1);
+      gain.gain.setValueAtTime(0.1, soundCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, soundCtx.currentTime + 0.2);
+      osc.start();
+      osc.stop(soundCtx.currentTime + 0.2);
+    }
+  } catch(e) {}
+}
+
+// Search
+let searchQuery = '';
+
+function filterGames(query) {
+  searchQuery = query.toLowerCase().trim();
+  const items = gamesList.querySelectorAll('.game-item');
+  items.forEach(item => {
+    const name = item.querySelector('.game-name').textContent.toLowerCase();
+    item.style.display = name.includes(searchQuery) ? '' : 'none';
+  });
+  // Update count
+  const visibleCount = Array.from(items).filter(i => i.style.display !== 'none').length;
+  gamesCount.textContent = visibleCount + ' ' + t('games');
+}
+
+// Game Preview
+let previewTimeout = null;
+let previewShowTimeout = null;
+
+function showPreview(game, x, y) {
+  // Clear any pending hide
+  clearTimeout(previewTimeout);
+  
+  // Delay showing to avoid flickering
+  clearTimeout(previewShowTimeout);
+  previewShowTimeout = setTimeout(() => {
+    const preview = document.getElementById('gamePreview');
+    const previewImg = document.getElementById('previewImage');
+    const previewName = document.getElementById('previewName');
+    
+    // Generate a simple preview using the game icon and color
+    previewImg.innerHTML = `<div style="width:100%;height:100%;background:${game.color || '#333'};border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:64px;">${game.icon}</div>`;
+    previewName.textContent = game.name;
+    
+    // Position - keep within viewport
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    
+    let left = x;
+    let top = y;
+    
+    // Adjust if would go off-screen
+    if (left + 200 > viewportWidth) {
+      left = x - 220; // Show on left side instead
+    }
+    if (top + 180 > viewportHeight) {
+      top = viewportHeight - 190;
+    }
+    if (top < 10) top = 10;
+    
+    preview.style.left = left + 'px';
+    preview.style.top = top + 'px';
+    
+    preview.classList.add('show');
+  }, 300); // 300ms delay before showing
+}
+
+function hidePreview() {
+  clearTimeout(previewShowTimeout);
+  previewTimeout = setTimeout(() => {
+    document.getElementById('gamePreview').classList.remove('show');
+  }, 100);
+}
+
+function toggleFavorite(gameName) {
+  const idx = favorites.indexOf(gameName);
+  if (idx >= 0) {
+    favorites.splice(idx, 1);
+  } else {
+    favorites.push(gameName);
+  }
+  localStorage.setItem('nes_favorites', JSON.stringify(favorites));
+  renderGamesList();
+  playSound('click');
+}
+
+function addToRecent(game) {
+  // Remove if already exists
+  recentGames = recentGames.filter(g => g.name !== game.name);
+  // Add to beginning
+  recentGames.unshift({ name: game.name, file: game.file, icon: game.icon, timestamp: Date.now() });
+  // Keep only last 10
+  recentGames = recentGames.slice(0, 10);
+  localStorage.setItem('nes_recent', JSON.stringify(recentGames));
+  renderRecentGames();
+}
+
+// Render recent games
+function renderRecentGames() {
+  const recentSection = document.getElementById('recentSection');
+  const recentList = document.getElementById('recentList');
+  
+  if (recentGames.length === 0) {
+    recentSection.style.display = 'none';
+    return;
+  }
+  
+  recentSection.style.display = 'block';
+  recentList.innerHTML = recentGames.map((game, idx) => `
+    <div class="game-item" data-recent-idx="${idx}">
+      <div class="game-icon" style="background:${game.color || '#333'}">${game.icon}</div>
+      <div class="game-name">${game.name}</div>
+    </div>
+  `).join('');
+  
+  recentList.querySelectorAll('.game-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const idx = parseInt(item.dataset.recentIdx);
+      const g = recentGames[idx];
+      // Find in PRELOADED_GAMES
+      const gameIdx = PRELOADED_GAMES.findIndex(pg => pg.name === g.name);
+      if (gameIdx >= 0) {
+        selectedGameIndex = gameIdx;
+        loadSelectedGame();
+      }
+    });
+  });
+}
+
+// Render favorites
+function renderFavorites() {
+  const favSection = document.getElementById('favoritesSection');
+  const favList = document.getElementById('favoritesList');
+  
+  if (favorites.length === 0) {
+    favSection.style.display = 'none';
+    return;
+  }
+  
+  favSection.style.display = 'block';
+  favList.innerHTML = favorites.map(favName => {
+    const game = PRELOADED_GAMES.find(g => g.name === favName);
+    if (!game) return '';
+    return `
+      <div class="game-item" data-fav-name="${game.name}">
+        <div class="game-icon" style="background:${game.color || '#333'}">${game.icon}</div>
+        <div class="game-name">${game.name}</div>
+      </div>
+    `;
+  }).join('');
+  
+  favList.querySelectorAll('.game-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const name = item.dataset.favName;
+      const gameIdx = PRELOADED_GAMES.findIndex(g => g.name === name);
+      if (gameIdx >= 0) {
+        selectedGameIndex = gameIdx;
+        loadSelectedGame();
+      }
+    });
+  });
+}
+
+// Show cheat panel
+function showCheatPanel() {
+  const panel = document.getElementById('cheatPanel');
+  const list = document.getElementById('cheatList');
+  const cheats = CHEAT_CODES[currentRomName] || [];
+  
+  if (cheats.length === 0) {
+    list.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-dim)">No cheats available for this game</div>';
+  } else {
+    list.innerHTML = cheats.map((cheat, idx) => `
+      <div class="cheat-item">
+        <div class="cheat-info">
+          <div class="cheat-name">${cheat.name}</div>
+          <div class="cheat-desc">${cheat.description}</div>
+        </div>
+        <span class="cheat-code">${cheat.code}</span>
+      </div>
+    `).join('');
+  }
+  
+  panel.classList.add('show');
+}
 
 // ============================================================
 // 60 FPS STABILIZER
@@ -1153,6 +1667,7 @@ const gamesCount = document.getElementById('gamesCount');
 
 const btnPause = document.getElementById('btnPause');
 const btnReset = document.getElementById('btnReset');
+const btnCheats = document.getElementById('btnCheats');
 const btnStop = document.getElementById('btnStop');
 const btnFullscreen = document.getElementById('btnFullscreen');
 const btnBrowse = document.getElementById('btnBrowse');
@@ -1164,6 +1679,7 @@ const saveSlots = document.getElementById('saveSlots');
 // Toast
 // ============================================================
 function showToast(key, type = 'info', params = {}) {
+  playSound(type === 'success' ? 'success' : type === 'error' ? 'error' : 'click');
   let message = t(key);
   // Заменяем плейсхолдеры {n}
   Object.entries(params).forEach(([k, v]) => {
@@ -1184,6 +1700,8 @@ let isLoadingMore = false;
 function renderGamesList() {
   gamesCount.textContent = PRELOADED_GAMES.length + ' ' + t('games');
   renderVisibleGames();
+  renderFavorites();
+  renderRecentGames();
   setupLazyLoad();
 }
 
@@ -1195,9 +1713,11 @@ function renderVisibleGames() {
   if (gamesToShow.length > existingCount) {
     const newGames = gamesToShow.slice(existingCount).map((game, idx) => {
       const realIdx = existingCount + idx;
+      const isFav = favorites.includes(game.name);
       return `
         <div class="game-item${realIdx === 0 ? ' selected' : ''}" data-game-idx="${realIdx}">
-          <div class="game-icon">${game.icon}</div>
+          <button class="favorite-btn ${isFav ? 'active' : ''}" data-fav="${game.name}" title="Add to Favorites">${isFav ? '⭐' : '☆'}</button>
+          <div class="game-icon" style="background:${game.color || '#333'}">${game.icon}</div>
           <div class="game-name">${game.name}</div>
         </div>
       `;
@@ -1209,7 +1729,32 @@ function renderVisibleGames() {
     const newItems = gamesList.querySelectorAll('.game-item:not([data-handler])');
     newItems.forEach(item => {
       item.setAttribute('data-handler', 'true');
-      item.addEventListener('click', () => {
+      
+      // Preview on hover (only if not hovering favorite button)
+      item.addEventListener('mouseenter', (e) => {
+        if (e.target.closest('.favorite-btn')) return;
+        const idx = parseInt(item.dataset.gameIdx);
+        const game = PRELOADED_GAMES[idx];
+        if (game) {
+          const rect = item.getBoundingClientRect();
+          showPreview(game, rect.right + 10, rect.top);
+        }
+      });
+      item.addEventListener('mouseleave', (e) => {
+        if (e.target.closest('.favorite-btn')) return;
+        hidePreview();
+      });
+      
+      // Click
+      item.addEventListener('click', (e) => {
+        playSound('click');
+        hidePreview();
+        if (e.target.classList.contains('favorite-btn')) {
+          const name = e.target.dataset.fav;
+          toggleFavorite(name);
+          e.stopPropagation();
+          return;
+        }
         const idx = parseInt(item.dataset.gameIdx);
         selectGame(idx);
         loadSelectedGame();
@@ -1295,6 +1840,8 @@ async function loadSelectedGame() {
   // Show loading
   itemEl?.classList.add('loading');
   loadingText.textContent = `Loading ${game.name}...`;
+  document.getElementById('loadingProgressBar').style.width = '0%';
+  document.getElementById('loadingPercent').textContent = '0%';
   loadingOverlay.classList.remove('hidden');
   gameSection.classList.add('active');
   menuSection.style.display = 'none';
@@ -1308,7 +1855,36 @@ async function loadSelectedGame() {
       const url = GITHUB_REPO + encodeURIComponent(game.file);
       const response = await fetch(url);
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      arrayBuffer = await response.arrayBuffer();
+      
+      const contentLength = response.headers.get('content-length');
+      const total = contentLength ? parseInt(contentLength) : 0;
+      let loaded = 0;
+      
+      const reader = response.body.getReader();
+      const chunks = [];
+      
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        chunks.push(value);
+        loaded += value.length;
+        
+        if (total > 0) {
+          const percent = Math.round((loaded / total) * 100);
+          document.getElementById('loadingProgressBar').style.width = percent + '%';
+          document.getElementById('loadingPercent').textContent = percent + '%';
+        }
+      }
+      
+      // Объединяем чанки в ArrayBuffer
+      const totalLength = chunks.reduce((acc, chunk) => acc + chunk.length, 0);
+      arrayBuffer = new Uint8Array(totalLength);
+      let offset = 0;
+      for (const chunk of chunks) {
+        arrayBuffer.set(chunk, offset);
+        offset += chunk.length;
+      }
+      
       romCache.set(game.file, arrayBuffer); // Кэшируем
     }
     
@@ -1316,6 +1892,9 @@ async function loadSelectedGame() {
     itemEl?.classList.remove('loading');
     
     await loadROM(arrayBuffer, game.name + '.nes');
+    
+    // Add to recent games
+    addToRecent(game);
     
   } catch(e) {
     loadingOverlay.classList.add('hidden');
@@ -1391,6 +1970,12 @@ document.addEventListener('keydown', (e) => {
     // Fullscreen toggle
     if (e.code === 'KeyF') {
       toggleFullscreen();
+      e.preventDefault();
+    }
+    
+    // Cheats toggle
+    if (e.code === 'KeyC') {
+      showCheatPanel();
       e.preventDefault();
     }
   }
@@ -1660,6 +2245,7 @@ document.querySelectorAll('[data-btn]').forEach(el => {
     initAudio();
     setButton(btn, true);
     el.classList.add('pressed');
+    playSound('click');
   };
   
   const release = () => {
@@ -1674,6 +2260,65 @@ document.querySelectorAll('[data-btn]').forEach(el => {
   el.addEventListener('touchend', release);
   el.addEventListener('touchcancel', release);
 });
+
+// Swipe gestures for game screen
+let touchStartX = 0;
+let touchStartY = 0;
+let touchStartTime = 0;
+
+gameSection.addEventListener('touchstart', (e) => {
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+  touchStartTime = Date.now();
+}, { passive: true });
+
+gameSection.addEventListener('touchend', (e) => {
+  if (!isRunning) return;
+  
+  const touchEndX = e.changedTouches[0].clientX;
+  const touchEndY = e.changedTouches[0].clientY;
+  const deltaX = touchEndX - touchStartX;
+  const deltaY = touchEndY - touchStartY;
+  const deltaTime = Date.now() - touchStartTime;
+  
+  // Detect swipe (fast movement)
+  if (deltaTime < 300 && (Math.abs(deltaX) > 50 || Math.abs(deltaY) > 50)) {
+    initAudio();
+    
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      // Horizontal swipe
+      if (deltaX > 0) {
+        setButton('right', true);
+        setTimeout(() => setButton('right', false), 100);
+      } else {
+        setButton('left', true);
+        setTimeout(() => setButton('left', false), 100);
+      }
+    } else {
+      // Vertical swipe
+      if (deltaY > 0) {
+        setButton('down', true);
+        setTimeout(() => setButton('down', false), 100);
+      } else {
+        setButton('up', true);
+        setTimeout(() => setButton('up', false), 100);
+      }
+    }
+    playSound('click');
+  }
+}, { passive: true });
+
+// Double tap for pause
+let lastTap = 0;
+gameSection.addEventListener('touchstart', (e) => {
+  const now = Date.now();
+  if (now - lastTap < 300) {
+    // Double tap detected
+    togglePause();
+    playSound('click');
+  }
+  lastTap = now;
+}, { passive: true });
 
 // ============================================================
 // Gamepad Support
@@ -1716,7 +2361,8 @@ function pollGamepad() {
 
 function connectGamepad(e) {
   gamepadIndex = e.gamepad.index;
-  gamepadStatus.innerHTML = '<span>🎮</span><span>' + t('connected') + '</span>';
+  const isMFi = e.gamepad.id.toLowerCase().includes('mfi') || e.gamepad.id.toLowerCase().includes('apple');
+  gamepadStatus.innerHTML = '<span>🎮</span><span>' + (isMFi ? 'MFi ' : '') + t('connected') + '</span>';
   gamepadStatus.classList.add('connected');
   showToast('gamepadConnected', 'success');
   pollGamepad();
@@ -1861,6 +2507,7 @@ function startGame() {
   
   btnPause.style.display = 'inline-flex';
   btnReset.style.display = 'inline-flex';
+  btnCheats.style.display = 'inline-flex';
   btnStop.style.display = 'inline-flex';
   
   romTitle.textContent = currentRomName;
@@ -1887,6 +2534,7 @@ function stopGame() {
   
   btnPause.style.display = 'none';
   btnReset.style.display = 'none';
+  btnCheats.style.display = 'none';
   btnStop.style.display = 'none';
   
   statusEl.textContent = t('readyToPlay');
@@ -1986,6 +2634,7 @@ uploadArea.addEventListener('drop', (e) => {
 // ============================================================
 btnPause.addEventListener('click', togglePause);
 btnReset.addEventListener('click', resetGame);
+btnCheats.addEventListener('click', showCheatPanel);
 btnStop.addEventListener('click', stopGame);
 
 btnFullscreen.addEventListener('click', () => {
@@ -2047,8 +2696,17 @@ initNES();
 initWebGL();
 ctx.fillStyle = '#000';
 ctx.fillRect(0, 0, 256, 240);
+initTheme();
 renderGamesList();
 applyLanguage();
+
+// Theme toggle
+document.getElementById('btnTheme').addEventListener('click', toggleTheme);
+
+// Search
+document.getElementById('gameSearch').addEventListener('input', (e) => {
+  filterGames(e.target.value);
+});
 
 // Check for gamepads
 if (navigator.getGamepads) {
@@ -2086,6 +2744,7 @@ function applyLanguage() {
   // Menu
   document.querySelector('.menu-subtitle').textContent = t('selectGame');
   document.querySelector('.games-list-title').textContent = t('games');
+  document.getElementById('gameSearch').placeholder = t('searchPlaceholder');
   
   // Nav hints
   const navHints = document.querySelectorAll('.nav-hint-item');
@@ -2094,6 +2753,7 @@ function applyLanguage() {
   navHints[2].innerHTML = `<kbd>Enter</kbd> ${t('play')}`;
   navHints[3].innerHTML = `<kbd>Esc</kbd> ${t('backToMenu')}`;
   if (navHints[4]) navHints[4].innerHTML = `<kbd>F</kbd> ${t('fullscreen')}`;
+  if (navHints[5]) navHints[5].innerHTML = `<kbd>C</kbd> Cheats`;
   
   // Upload
   document.querySelector('.upload-text').textContent = t('dropRom');
