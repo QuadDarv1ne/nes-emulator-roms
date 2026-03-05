@@ -1,0 +1,36 @@
+# Игровые ROM-файлы (могут быть защищены авторским правом)
+*.nes
+*.NES
+*.fds
+*.FDS
+*.unf
+*.UNF
+*.nsf
+*.NSF
+*.zip
+*.ZIP
+*.7z
+*.7Z
+*.rar
+*.RAR
+
+# Архивы
+games/archive/
+*.tar
+*.gz
+
+# Системные файлы
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Файлы редакторов
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Темпы
+*.tmp
+*.temp
